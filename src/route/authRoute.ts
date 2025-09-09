@@ -1,9 +1,16 @@
 import { Router } from 'express'
-import { login, registerUser } from '../controller/authController'
+import { login, registerEmployee } from '../controller/authController'
+import auth from '../middlewares/auth'
+import authenticateRole from '../middlewares/authenticationRole'
 
 const router = Router()
 
-router.post('/register', registerUser) // tourist self-register (opsional)
+router.post(
+  '/register/employee',
+  auth,
+  authenticateRole('admin'),
+  registerEmployee
+)
 router.post('/login', login)
 
 export default router

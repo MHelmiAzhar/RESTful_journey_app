@@ -6,7 +6,7 @@ interface UserAttributes {
   name: string
   email: string
   password: string
-  role: 'employee' | 'tourist'
+  role: 'employee' | 'admin'
   createdAt?: Date
   updatedAt?: Date
 }
@@ -22,15 +22,9 @@ class User
   public name!: string
   public email!: string
   public password!: string
-  public role!: 'employee' | 'tourist'
+  public role!: 'employee' | 'admin'
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
-  static associate(models: any) {
-    User.hasOne(models.Tourist, {
-      foreignKey: 'user_id',
-      as: 'tourist'
-    })
-  }
 }
 
 User.init(
@@ -44,9 +38,9 @@ User.init(
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     password: { type: DataTypes.STRING, allowNull: false },
     role: {
-      type: DataTypes.ENUM('employee', 'tourist'),
+      type: DataTypes.ENUM('employee', 'admin'),
       allowNull: false,
-      defaultValue: 'tourist'
+      defaultValue: 'employee'
     }
   },
   {
