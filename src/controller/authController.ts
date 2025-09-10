@@ -1,5 +1,9 @@
 import { Request, Response } from 'express'
-import { loginService, registerEmployeeService } from '../service/authService'
+import {
+  loginService,
+  registerEmployeeService,
+  registerTouristService
+} from '../service/authService'
 import Joi from 'joi'
 import {
   resErrorHandler,
@@ -7,24 +11,68 @@ import {
 } from '../common/exception/resHandler'
 import { dtoValidation } from '../common/helper/dtoValidation'
 
+export const registerTourist = async (req: Request, res: Response) => {
+  try {
+    const { name, email, password, address, phone_number } =
+      await dtoValidation<{
+        name: string
+        email: string
+        password: string
+        address: string
+        phone_number: string
+      }>(
+        req.body,
+        Joi.object({
+          name: Joi.string().required(),
+          email: Joi.string().email().required(),
+          password: Joi.string().min(6).required(),
+          address: Joi.string().required(),
+          phone_number: Joi.string().required()
+        })
+      )
+    const result = await registerTouristService({
+      name,
+      email,
+      password,
+      address,
+      phone_number
+    })
+    return resSuccessHandler(
+      res,
+      result,
+      'Tourist registered successfully',
+      201
+    )
+  } catch (err: any) {
+    return resErrorHandler(res, err)
+  }
+}
+
 export const registerEmployee = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = await dtoValidation<{
-      name: string
-      email: string
-      password: string
-    }>(
-      req.body,
-      Joi.object({
-        name: Joi.string().required(),
-        email: Joi.string().email().required(),
-        password: Joi.string().min(6).required()
-      })
-    )
+    const { name, email, password, address, phone_number } =
+      await dtoValidation<{
+        name: string
+        email: string
+        password: string
+        address: string
+        phone_number: string
+      }>(
+        req.body,
+        Joi.object({
+          name: Joi.string().required(),
+          email: Joi.string().email().required(),
+          password: Joi.string().min(6).required(),
+          address: Joi.string().required(),
+          phone_number: Joi.string().required()
+        })
+      )
     const result = await registerEmployeeService({
       name,
       email,
-      password
+      password,
+      address,
+      phone_number
     })
     return resSuccessHandler(
       res,

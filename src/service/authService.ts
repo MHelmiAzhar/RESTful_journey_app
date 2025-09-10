@@ -2,20 +2,54 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../models/User'
 import ClientError from '../common/exception/clientError'
-import Tourist from '../models/Tourist'
+import { checkEmailExist } from '../repository/user/checkEmailExistRepository'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey'
 
-export async function registerEmployeeService({
+export async function registerTouristService({
   name,
   email,
-  password
+  password,
+  address,
+  phone_number
 }: {
   name: string
   email: string
   password: string
+  address: string
+  phone_number: string
 }) {
-  const exists = await User.findOne({ where: { email } })
+  const exists = await checkEmailExist(email)
+  if (exists) {
+    throw new ClientError('Email already used')
+  }
+  const hash = await bcrypt.hash(password, 10)
+  const user = await User.create({
+    name,
+    email,
+    address,
+    phone_number,
+    password: hash,
+    role: 'tourist'
+  })
+
+  return user
+}
+
+export async function registerEmployeeService({
+  name,
+  email,
+  password,
+  address,
+  phone_number
+}: {
+  name: string
+  email: string
+  password: string
+  address: string
+  phone_number: string
+}) {
+  const exists = await checkEmailExist(email)
   if (exists) {
     throw new ClientError('Email already used')
   }
@@ -24,7 +58,9 @@ export async function registerEmployeeService({
     name,
     email,
     password: hash,
-    role: 'employee'
+    role: 'employee',
+    address,
+    phone_number
   })
   return employee
 }

@@ -9,12 +9,12 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable("Journeys", {
+    await queryInterface.createTable("journeys", {
       id: { allowNull: false, autoIncrement: true, primaryKey: true, type: Sequelize.INTEGER },
-      tourist_id: { type: Sequelize.INTEGER, allowNull: false, references: { model: "Tourists", key: "id" }, onDelete: "CASCADE" },
+      user_id: { type: Sequelize.INTEGER, allowNull: false, references: { model: "users", key: "id" }, onDelete: "CASCADE" },
       start_date: { type: Sequelize.DATE, allowNull: false },
       end_date: { type: Sequelize.DATE, allowNull: false },
-      destination: { type: Sequelize.JSON, allowNull: true }, // jika MySQL < 5.7 gunakan Sequelize.TEXT
+      destination: { type: Sequelize.JSON, allowNull: true },
       createdAt: { allowNull: false, type: Sequelize.DATE },
       updatedAt: { allowNull: false, type: Sequelize.DATE }
     });

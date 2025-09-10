@@ -3,12 +3,10 @@ import dotenv from 'dotenv'
 import swaggerUi from 'swagger-ui-express'
 dotenv.config()
 
-import authRoutes from './route/authRoute'
+import authRoutes from './routes/authRoutes'
+import userRoutes from './routes/userRoutes'
+import journeyRoutes from './routes/journeyRoutes'
 import { swaggerSpec } from './config/swagger'
-// import userRoutes from "./routes/userRoutes";
-// import journeyRoutes from "./routes/journeyRoutes";
-// import swaggerUi from "swagger-ui-express";
-// import swaggerSpec from "./docs/swagger"; // minimal swagger file (lihat nanti)
 
 const app = express()
 app.use(express.json())
@@ -16,8 +14,8 @@ app.use(express.json())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.use('/api/auth', authRoutes)
-// app.use('/api/users', userRoutes) // employee-only routes
-// app.use('/api/journeys', journeyRoutes)
+app.use('/api/user', userRoutes)
+app.use('/api/journeys', journeyRoutes)
 
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use('/', (req, res) => {
