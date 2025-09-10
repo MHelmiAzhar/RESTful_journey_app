@@ -5,7 +5,7 @@ import { checkEmailExist } from '../repository/user/checkEmailExistRepository'
 import { checkUserExist } from '../repository/user/checkUserExistRepository'
 import bcrypt from 'bcrypt'
 import { Op } from 'sequelize'
-import { getAllUsers } from '../repository/user/getAllUserRepository'
+import { getAllUsersRepository } from '../repository/user/getAllUserRepository'
 
 export async function createTouristService(params: {
   name: string
@@ -37,11 +37,10 @@ export async function updateTouristService(params: {
   id: number
   name?: string
   email?: string
-  password?: string
   address?: string
   phone_number?: string
 }) {
-  const { id, name, email, password, address, phone_number } = params
+  const { id, name, email, address, phone_number } = params
   //find user
   const user = await checkUserExist(id)
   if (!user) {
@@ -61,7 +60,8 @@ export async function updateTouristService(params: {
     {
       name,
       email,
-      password: password ? await bcrypt.hash(password, 10) : user.password
+      address,
+      phone_number
     },
     { where: { id } }
   )
@@ -99,8 +99,19 @@ export async function listTouristsService(params: {
     limit: size,
     offset: (page - 1) * size
   }
-  const result = await getAllUsers(parameters)
-  return result
+  const result = await getAllUsersRepository(parameters)
+  const totalData = result.count
+  const totalPage = Math.ceil(totalData / size)
+
+  return {
+    users: result.rows,
+    pagination: {
+      totalData,
+      totalPage,
+      currentPage: page,
+      perPage: size
+    }
+  }
 }
 
 export async function listEmployeesService(params: {
@@ -122,6 +133,17 @@ export async function listEmployeesService(params: {
     limit: size,
     offset: (page - 1) * size
   }
-  const result = await getAllUsers(parameters)
-  return result
+  const result = await getAllUsersRepository(parameters)
+  const totalData = result.count
+  const totalPage = Math.ceil(totalData / size)
+
+  return {
+    users: result.rows,
+    pagination: {
+      totalData,
+      totalPage,
+      currentPage: page,
+      perPage: size
+    }
+  }
 }

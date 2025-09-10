@@ -12,10 +12,12 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    const hash = bcrypt.hashSync('adminpassword', 10);
-    await queryInterface.bulkInsert('Users', [{
+    const hash = bcrypt.hashSync('admin123', 10);
+    await queryInterface.bulkInsert('users', [{
       name: 'Admin Rude-D',
       email: 'rude.admin@gmail.com',
+      address: 'Jl. Admin No. 1',
+      phone_number: '081234567890',
       password: hash,
       role: 'admin',
       createdAt: new Date(),

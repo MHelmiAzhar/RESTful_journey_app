@@ -7,7 +7,9 @@ export default function authenticateRole(
     const user = (req as any).user
     if (!user) return res.status(401).json({ message: 'No user in request' })
     if (!requiredRoles.includes(user.role))
-      return res.status(403).json({ message: 'Forbidden' })
+      return res
+        .status(403)
+        .json({ message: 'Forbidden You do not have the required role' })
     next()
   }
 }

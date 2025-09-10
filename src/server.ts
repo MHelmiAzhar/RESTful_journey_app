@@ -10,8 +10,7 @@ const PORT = process.env.PORT || 3000
     await sequelize.authenticate()
     console.log('DB connected')
     app.listen(PORT, () => {
-      console.log(`Server running http://localhost:${PORT}`)
-      console.log(`Swagger: http://localhost:${PORT}/api-docs`)
+      console.log(`Server is running`)
     })
   } catch (err) {
     console.error('Failed to start:', err)

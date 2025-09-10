@@ -17,8 +17,8 @@ router.post(
   authenticateRole(['employee', 'admin']),
   createTourist
 )
-router.post('/edit/:id', auth, updateTourist)
-router.post('/delete/:id', auth, deleteTourist)
+router.put('/edit/:id', auth, updateTourist)
+router.delete('/delete/:id', auth, deleteTourist)
 
 router.get(
   '/get-tourists',

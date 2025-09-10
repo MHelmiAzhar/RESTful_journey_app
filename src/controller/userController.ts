@@ -61,21 +61,20 @@ export const updateTourist = async (req: Request, res: Response) => {
         id: Joi.number().required()
       })
     )
-    const { name, email, password, address, phone_number } =
-      await dtoValidation<{
-        name: string
-        email: string
-        password: string
-        address: string
-        phone_number: string
-      }>(
-        req.body,
-        Joi.object({
-          password: Joi.string().min(6).required(),
-          address: Joi.string().required(),
-          phone_number: Joi.string().required()
-        })
-      )
+    const { name, email, address, phone_number } = await dtoValidation<{
+      name: string
+      email: string
+      address: string
+      phone_number: string
+    }>(
+      req.body,
+      Joi.object({
+        name: Joi.string().optional(),
+        email: Joi.string().email().optional(),
+        address: Joi.string().optional(),
+        phone_number: Joi.string().optional()
+      })
+    )
 
     const user = getLoggedInUser(req)
     if (user.role === 'tourist' && user.id !== Number(id)) {
@@ -87,7 +86,6 @@ export const updateTourist = async (req: Request, res: Response) => {
       id,
       name,
       email,
-      password,
       address,
       phone_number
     })
@@ -115,7 +113,7 @@ export const deleteTourist = async (req: Request, res: Response) => {
       )
     }
     await deleteTouristService(id)
-    return resSuccessHandler(res, null, 'Tourist deleted successfully')
+    return resSuccessHandler(res, null, 'Tourist deleted successfully', 200)
   } catch (err) {
     console.error(err)
     return resErrorHandler(res, err)

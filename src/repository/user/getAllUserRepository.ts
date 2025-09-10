@@ -1,6 +1,6 @@
 import User from '../../models/User'
 
-export async function getAllUsers(params: {
+export async function getAllUsersRepository(params: {
   where: { [key: string]: any }
   limit: number
   offset: number
