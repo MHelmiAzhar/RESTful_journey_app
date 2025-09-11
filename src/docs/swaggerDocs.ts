@@ -299,6 +299,7 @@
  * /api/user/get-tourists:
  *   get:
  *     summary: List all tourists with pagination
+ *     description: Only accessible by admin and employee
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
