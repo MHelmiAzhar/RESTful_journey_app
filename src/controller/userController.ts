@@ -36,6 +36,7 @@ export const createTourist = async (req: Request, res: Response) => {
           phone_number: Joi.string().required()
         })
       )
+    //Create touris
     const result = await createTouristService({
       name,
       email,
@@ -82,6 +83,8 @@ export const updateTourist = async (req: Request, res: Response) => {
         'Forbidden: You can only edit your own data.'
       )
     }
+
+    //Update tourist
     await updateTouristService({
       id,
       name,

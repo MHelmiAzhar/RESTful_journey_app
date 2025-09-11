@@ -21,7 +21,7 @@ export async function getAllJourneyRepository({
     ${!user_id ? ', u.name as user_name' : ''}
     FROM journeys j
     JOIN users u ON j.user_id = u.id
-    WHERE j.name LIKE :search OR u.name LIKE :search
+    WHERE j.destination LIKE :search OR u.name LIKE :search
     ${user_id ? 'AND j.user_id = :user_id' : ''}
     ORDER BY j.createdAt DESC
     LIMIT :size OFFSET :offset
@@ -43,7 +43,7 @@ export async function getAllJourneyRepository({
     SELECT COUNT(*) as total
     FROM journeys j
     JOIN users u ON j.user_id = u.id
-    WHERE j.name LIKE :search OR u.name LIKE :search
+    WHERE j.destination LIKE :search OR u.name LIKE :search
     ${user_id ? 'AND j.user_id = :user_id' : ''}
     `,
     {

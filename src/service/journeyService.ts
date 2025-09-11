@@ -115,9 +115,9 @@ export async function getAllJourneyService(params: {
     grouped[name].push(journey)
   }
 
-  // Formating to desired output
-  const result = Object.entries(grouped).map(([nama_user, data_jurnet]) => ({
-    [nama_user]: data_jurnet
+  // Remove user_name from each journey object
+  const result = Object.entries(grouped).map(([nama_user, data_jurney]) => ({
+    [nama_user]: data_jurney.map(({ user_name, ...rest }) => rest)
   }))
 
   return {

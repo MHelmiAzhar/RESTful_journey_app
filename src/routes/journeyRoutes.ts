@@ -12,8 +12,8 @@ import {
 const router = Router()
 
 router.post('/create', auth, createJourneyForUser)
-router.post('/edit/:journey_id', auth, updateJourney)
-router.post('/delete/:journey_id', auth, deleteJourney)
+router.put('/edit/:journey_id', auth, updateJourney)
+router.delete('/delete/:journey_id', auth, deleteJourney)
 
 router.get(
   '/get-all-journeys',

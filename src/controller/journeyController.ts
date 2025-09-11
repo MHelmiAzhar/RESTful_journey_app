@@ -15,6 +15,7 @@ import {
   updateJourneyService
 } from '../service/journeyService'
 import AuthorizationError from '../common/exception/authorizationError'
+import ClientError from '../common/exception/clientError'
 
 export const createJourneyForUser = async (req: Request, res: Response) => {
   try {
@@ -31,19 +32,12 @@ export const createJourneyForUser = async (req: Request, res: Response) => {
         start_date: Joi.date().required(),
         end_date: Joi.date().required(),
         destination: Joi.string().required()
-      }).custom((value, helpers) => {
-        if (
-          value.start_date &&
-          value.end_date &&
-          value.start_date >= value.end_date
-        ) {
-          return helpers.error('any.invalid', {
-            message: 'start_date must be less than end_date'
-          })
-        }
-        return value
       })
     )
+
+    if (start_date >= end_date) {
+      throw new ClientError('start_date must be less than end_date')
+    }
 
     // If the logged-in user is a tourist, override the user_id to ensure they can only create journeys for themselves
     const loggedInUser = getLoggedInUser(req)
@@ -79,17 +73,6 @@ export const updateJourney = async (req: Request, res: Response) => {
         start_date: Joi.date().optional(),
         end_date: Joi.date().optional(),
         destination: Joi.string().optional()
-      }).custom((value, helpers) => {
-        if (
-          value.start_date &&
-          value.end_date &&
-          value.start_date >= value.end_date
-        ) {
-          return helpers.error('any.invalid', {
-            message: 'start_date must be less than end_date'
-          })
-        }
-        return value
       })
     )
     let { journey_id } = await dtoValidation<{
@@ -101,6 +84,9 @@ export const updateJourney = async (req: Request, res: Response) => {
       })
     )
 
+    if (start_date >= end_date) {
+      throw new ClientError('start_date must be less than end_date')
+    }
     // Get logged in user
     const loggedInUser = getLoggedInUser(req)
 
@@ -175,7 +161,7 @@ export const getAllJourneys = async (req: Request, res: Response) => {
     )
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ message: 'Server error' })
+    return resErrorHandler(res, err)
   }
 }
 export const getUserHistoryJourneys = async (req: Request, res: Response) => {
@@ -224,6 +210,6 @@ export const getUserHistoryJourneys = async (req: Request, res: Response) => {
     )
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ message: 'Server error' })
+    return resErrorHandler(res, err)
   }
 }

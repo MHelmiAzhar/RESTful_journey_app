@@ -13,6 +13,7 @@ import { dtoValidation } from '../common/helper/dtoValidation'
 
 export const registerTourist = async (req: Request, res: Response) => {
   try {
+    //Validate request body
     const { name, email, password, address, phone_number } =
       await dtoValidation<{
         name: string
@@ -30,6 +31,8 @@ export const registerTourist = async (req: Request, res: Response) => {
           phone_number: Joi.string().required()
         })
       )
+
+    //Register tourist
     const result = await registerTouristService({
       name,
       email,
@@ -50,6 +53,7 @@ export const registerTourist = async (req: Request, res: Response) => {
 
 export const registerEmployee = async (req: Request, res: Response) => {
   try {
+    //Validate request body
     const { name, email, password, address, phone_number } =
       await dtoValidation<{
         name: string
@@ -67,6 +71,8 @@ export const registerEmployee = async (req: Request, res: Response) => {
           phone_number: Joi.string().required()
         })
       )
+
+    //Register employee
     const result = await registerEmployeeService({
       name,
       email,
@@ -87,6 +93,7 @@ export const registerEmployee = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
+    //Validate request body
     const { email, password } = await dtoValidation<{
       email: string
       password: string
@@ -97,6 +104,8 @@ export const login = async (req: Request, res: Response) => {
         password: Joi.string().required()
       })
     )
+
+    //Login user
     const result = await loginService({ email, password })
     return resSuccessHandler(res, result, 'Login successful', 200)
   } catch (err: any) {

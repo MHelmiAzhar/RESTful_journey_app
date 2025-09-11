@@ -1,4 +1,3 @@
-import { where } from 'sequelize'
 import ClientError from '../common/exception/clientError'
 import User from '../models/User'
 import { checkEmailExist } from '../repository/user/checkEmailExistRepository'
@@ -21,11 +20,13 @@ export async function createTouristService(params: {
     throw new ClientError('Email already used')
   }
 
+  const hash = await bcrypt.hash(password, 10)
+
   //create user & tourist
   const user = await User.create({
     name,
     email,
-    password,
+    password: hash,
     address,
     phone_number,
     role: 'tourist'

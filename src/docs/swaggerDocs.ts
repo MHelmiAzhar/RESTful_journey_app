@@ -425,7 +425,7 @@
 
 /**
  * @swagger
- * /api/journey:
+ * /api/journeys/create:
  *   post:
  *     summary: Create a journey for a user
  *     tags: [Journey]
@@ -451,15 +451,27 @@
  *             schema:
  *               type: object
  *               properties:
- *                 status: { type: boolean }
- *                 data: { type: object }
- *                 message: { type: string }
- *                 code: { type: integer }
+ *                 status:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id: { type: integer }
+ *                     user_id: { type: integer }
+ *                     start_date: { type: string, format: date-time }
+ *                     end_date: { type: string, format: date-time }
+ *                     destination: { type: string }
+ *                     updatedAt: { type: string, format: date-time }
+ *                     createdAt: { type: string, format: date-time }
+ *                 message:
+ *                   type: string
+ *                 code:
+ *                   type: integer
  */
 
 /**
  * @swagger
- * /api/journey/{journey_id}:
+ * /api/journeys/edit/{journey_id}:
  *   put:
  *     summary: Update a journey
  *     tags: [Journey]
@@ -495,7 +507,7 @@
 
 /**
  * @swagger
- * /api/journey/{journey_id}:
+ * /api/journeys/delete/{journey_id}:
  *   delete:
  *     summary: Delete a journey
  *     tags: [Journey]
@@ -519,13 +531,83 @@
 
 /**
  * @swagger
- * /api/journey:
+ * /api/journeys/get-all-journeys:
  *   get:
- *     summary: List all journeys (grouped by user)
+ *     summary: List all journeys grouped by user with pagination
  *     tags: [Journey]
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Current page number
+ *       - in: query
+ *         name: perPage
+ *         schema:
+ *           type: integer
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search keyword
+ *     responses:
+ *       200:
+ *         description: Journey list fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         additionalProperties:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               id: { type: integer }
+ *                               user_id: { type: integer }
+ *                               start_date: { type: string, format: date-time }
+ *                               end_date: { type: string, format: date-time }
+ *                               destination: { type: string }
+ *                               createdAt: { type: string, format: date-time }
+ *                               updatedAt: { type: string, format: date-time }
+ *                               user_name: { type: string }
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         totalData: { type: integer }
+ *                         totalPage: { type: integer }
+ *                         currentPage: { type: integer }
+ *                         perPage: { type: integer }
+ *                 message:
+ *                   type: string
+ *                 code:
+ *                   type: integer
+ */
+/**
+ * @swagger
+ * /api/journeys/get-user-history/{user_id}:
+ *   get:
+ *     summary: List of historical journeys tourist
+ *     tags: [Journey]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema: { type: integer }
  *       - in: query
  *         name: page
  *         schema: { type: integer }
@@ -537,21 +619,38 @@
  *         schema: { type: string }
  *     responses:
  *       200:
- *         description: List of journeys grouped by user
+ *         description: Journey list fetched successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 status:
+ *                   type: boolean
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                 pagination:
  *                   type: object
  *                   properties:
- *                     totalData: { type: integer }
- *                     totalPage: { type: integer }
- *                     currentPage: { type: integer }
- *                     perPage: { type: integer }
+ *                     journeys:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id: { type: integer }
+ *                           user_id: { type: integer }
+ *                           start_date: { type: string, format: date-time }
+ *                           end_date: { type: string, format: date-time }
+ *                           destination: { type: string }
+ *                           createdAt: { type: string, format: date-time }
+ *                           updatedAt: { type: string, format: date-time }
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         totalData: { type: integer }
+ *                         totalPage: { type: integer }
+ *                         currentPage: { type: integer }
+ *                         perPage: { type: integer }
+ *                 message:
+ *                   type: string
+ *                 code:
+ *                   type: integer
  */

@@ -74,11 +74,11 @@ export async function loginService({
 }) {
   const user = await User.findOne({ where: { email } })
   if (!user) {
-    throw new Error('Invalid credentials')
+    throw new ClientError('Invalid credentials')
   }
   const matched = await bcrypt.compare(password, user.password)
   if (!matched) {
-    throw new Error('Invalid credentials')
+    throw new ClientError('Invalid credentials')
   }
   const token = jwt.sign(
     { id: user.id, email: user.email, role: user.role },

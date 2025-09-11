@@ -6,7 +6,7 @@ interface JourneyAttributes {
   user_id: number
   start_date: Date
   end_date: Date
-  destination?: object | string | null
+  destination: string
   createdAt?: Date
   updatedAt?: Date
 }
@@ -21,7 +21,7 @@ class Journey
   public user_id!: number
   public start_date!: Date
   public end_date!: Date
-  public destination?: object | string | null
+  public destination!: string
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
   static associate(models: any) {
@@ -42,7 +42,7 @@ Journey.init(
     user_id: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false },
     start_date: { type: DataTypes.DATE, allowNull: false },
     end_date: { type: DataTypes.DATE, allowNull: false },
-    destination: { type: DataTypes.JSON, allowNull: true }
+    destination: { type: DataTypes.STRING, allowNull: false }
   },
   {
     sequelize,
